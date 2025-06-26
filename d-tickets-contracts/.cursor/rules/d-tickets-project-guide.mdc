@@ -1,0 +1,109 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# D-Tickets Solana NFT票务系统开发指南
+
+## 项目概述
+"闪电票务嘉年华"是基于Solana区块链的去中心化票务系统，利用NFT技术解决传统票务市场的黄牛、假票和透明度问题。
+
+## 核心技术栈
+- **智能合约**: Rust + Solana Program Library (SPL)
+- **前端**: React/Vue/Angular + Solana Web3.js SDK
+- **NFT标准**: Metaplex Token Metadata
+- **存储**: IPFS/Arweave (去中心化存储)
+- **钱包集成**: Phantom, Solflare, Backpack等
+
+## 项目架构
+
+### 链上组件 (Solana Programs)
+- `programs/event-management/` - 活动与票务管理合约
+- `programs/pricing-strategy/` - 动态定价策略合约  
+- `programs/sales-transfer/` - 销售与转账处理合约
+- `programs/marketplace/` - 二级市场交易合约
+- `programs/redemption/` - 门票核销合约
+
+### 链下组件
+- `frontend/` - 用户界面应用
+- `admin-dashboard/` - 主办方管理后台
+- `metadata/` - NFT元数据模板
+- `scripts/` - 部署和工具脚本
+
+## 核心功能模块
+
+### 1. 票务NFT铸造与管理
+**链上职责:**
+- 活动基础数据结构定义 (event_id, organizer_address, event_name等)
+- 票种配置存储 (ticket_type_id, type_name, pricing等)
+- NFT Collection管理和批量铸造
+- 门票状态管理 (minted, sold, transferred, redeemed, refunded)
+- 退票功能支持二次售卖
+
+**链下职责:**
+- 主办方Dashboard界面
+- 票种与座位配置界面
+- 元数据上传至IPFS/Arweave
+- 交易指令构建与钱包交互
+
+### 2. 动态定价智能合约
+**链上职责:**
+- 固定价格vs动态价格策略判断
+- 基于销量和时间的阶梯定价规则
+- 实时票价计算逻辑
+- 价格状态链上更新
+
+**链下职责:**
+- 定价策略配置界面
+- 实时价格展示
+- 价格变动历史可视化
+
+### 3. 用户购买与NFT分发
+**链上职责:**
+- 门票购买函数 (支付验证、库存检查、NFT转移)
+- 交易原子性保证
+- 入场核销功能
+
+**链下职责:**
+- 活动浏览与详情展示
+- 钱包连接与交易签名
+- NFT即时分发通知
+- "我的门票"管理页面
+
+## 开发规范
+
+### 智能合约开发
+- 使用Anchor框架开发Solana程序
+- 所有核心合约部署前必须通过安全审计
+- 实现可升级性设计模式
+- 添加完整的错误处理和事件记录
+
+### 前端开发
+- 使用TypeScript确保类型安全
+- 集成@solana/web3.js和@solana/wallet-adapter
+- 实现响应式设计，支持移动端
+- 添加完整的错误处理和用户引导
+
+### 安全要求
+- 防重入攻击、双花等安全机制
+- 私钥不托管原则
+- 抗DDoS和女巫攻击防护
+- 数据持久性保证
+
+## 性能指标
+- 支持每秒1000+购买交易
+- 交易确认时间<5秒
+- 页面响应时间<3秒
+- 系统正常运行时间99.5%+
+
+## 文件命名约定
+- 智能合约: `snake_case.rs`
+- 前端组件: `PascalCase.tsx/vue`
+- 工具脚本: `kebab-case.js/ts`
+- 配置文件: `lowercase.json/yaml`
+
+## 测试策略
+- 单元测试覆盖率>80%
+- 集成测试覆盖关键用户流程
+- 负载测试验证性能指标
+- 安全测试识别潜在漏洞

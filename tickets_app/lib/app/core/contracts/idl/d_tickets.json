@@ -1,0 +1,5030 @@
+{
+  "address": "4RmJgJPUEkBJu8etoeMSt6B62RGvMR7iviNQEyHThJHG",
+  "metadata": {
+    "name": "d_tickets",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_ticket_type",
+      "docs": [
+        "添加票种配置"
+      ],
+      "discriminator": [
+        23,
+        133,
+        138,
+        179,
+        6,
+        148,
+        136,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "type_name",
+          "type": "string"
+        },
+        {
+          "name": "initial_price",
+          "type": "u64"
+        },
+        {
+          "name": "total_supply",
+          "type": "u32"
+        },
+        {
+          "name": "max_resale_royalty",
+          "type": "u16"
+        },
+        {
+          "name": "is_fixed_price",
+          "type": "bool"
+        },
+        {
+          "name": "dynamic_pricing_rules_hash",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "batch_update_seat_status",
+      "docs": [
+        "批量更新座位状态"
+      ],
+      "discriminator": [
+        35,
+        75,
+        233,
+        252,
+        37,
+        171,
+        34,
+        251
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "docs": [
+            "授权用户（可以是创建者或购票者）"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "docs": [
+            "活动账户"
+          ]
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "票种账户"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seat_status_map",
+          "docs": [
+            "座位状态映射账户"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  117,
+                  115,
+                  95,
+                  109,
+                  97,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type"
+              },
+              {
+                "kind": "arg",
+                "path": "area_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "area_id",
+          "type": "string"
+        },
+        {
+          "name": "seat_updates",
+          "type": {
+            "vec": {
+              "defined": {
+                "name": "SeatStatusUpdate"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "buy_ticket_from_market",
+      "docs": [
+        "从二级市场购买门票"
+      ],
+      "discriminator": [
+        123,
+        189,
+        144,
+        28,
+        132,
+        89,
+        18,
+        69
+      ],
+      "accounts": [
+        {
+          "name": "listing",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  108,
+                  105,
+                  115,
+                  116,
+                  105,
+                  110,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "listing.ticket_mint",
+                "account": "MarketplaceListingAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.mint",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.event",
+                "account": "TicketAccount"
+              },
+              {
+                "kind": "account",
+                "path": "ticket.ticket_type_name",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "earnings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  97,
+                  114,
+                  110,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.event",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancel_ticket_listing",
+      "docs": [
+        "取消二级市场挂单"
+      ],
+      "discriminator": [
+        159,
+        26,
+        71,
+        105,
+        94,
+        95,
+        219,
+        129
+      ],
+      "accounts": [
+        {
+          "name": "listing",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  108,
+                  105,
+                  115,
+                  116,
+                  105,
+                  110,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "listing.ticket_mint",
+                "account": "MarketplaceListingAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.mint",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seller",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "configure_seat",
+      "docs": [
+        "配置座位"
+      ],
+      "discriminator": [
+        201,
+        191,
+        77,
+        193,
+        227,
+        193,
+        131,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "场馆创建者（主办方）"
+          ],
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "venue_account"
+          ]
+        },
+        {
+          "name": "venue_account",
+          "docs": [
+            "场馆账户（PDA）"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  110,
+                  117,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "venue_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "票种账户（PDA）"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "event",
+          "docs": [
+            "关联的活动账户"
+          ]
+        },
+        {
+          "name": "seat_account",
+          "docs": [
+            "座位账户（PDA）- 使用 InitSpace 自动计算空间"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "venue_account"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type"
+              },
+              {
+                "kind": "arg",
+                "path": "seat_number"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "系统程序"
+          ],
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "venue_name",
+          "type": "string"
+        },
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "seat_number",
+          "type": "string"
+        },
+        {
+          "name": "area_id",
+          "type": "string"
+        },
+        {
+          "name": "row_number",
+          "type": "string"
+        },
+        {
+          "name": "seat_number_in_row",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "create_event",
+      "docs": [
+        "创建新活动 - 关联现有场馆"
+      ],
+      "discriminator": [
+        49,
+        219,
+        29,
+        203,
+        22,
+        98,
+        100,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "earnings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  97,
+                  114,
+                  110,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "venue",
+          "docs": [
+            "关联的场馆账户（必须已存在且为未使用或活跃状态）"
+          ],
+          "writable": true
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        },
+        {
+          "name": "event_description_hash",
+          "type": "string"
+        },
+        {
+          "name": "event_poster_image_hash",
+          "type": "string"
+        },
+        {
+          "name": "event_start_time",
+          "type": "i64"
+        },
+        {
+          "name": "event_end_time",
+          "type": "i64"
+        },
+        {
+          "name": "ticket_sale_start_time",
+          "type": "i64"
+        },
+        {
+          "name": "ticket_sale_end_time",
+          "type": "i64"
+        },
+        {
+          "name": "seat_map_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "event_category",
+          "type": "string"
+        },
+        {
+          "name": "performer_details_hash",
+          "type": "string"
+        },
+        {
+          "name": "contact_info_hash",
+          "type": "string"
+        },
+        {
+          "name": "refund_policy_hash",
+          "type": "string"
+        },
+        {
+          "name": "pricing_strategy_type",
+          "type": {
+            "defined": {
+              "name": "PricingStrategyType"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_seat_status_map",
+      "docs": [
+        "创建或更新座位状态映射（支持添加和修改）"
+      ],
+      "discriminator": [
+        123,
+        94,
+        250,
+        63,
+        82,
+        243,
+        194,
+        134
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "活动创建者"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "docs": [
+            "活动账户"
+          ],
+          "writable": true
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "票种账户"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seat_status_map",
+          "docs": [
+            "座位状态映射账户（PDA）- 支持创建或更新"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  117,
+                  115,
+                  95,
+                  109,
+                  97,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type"
+              },
+              {
+                "kind": "arg",
+                "path": "area_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "系统程序"
+          ],
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "area_id",
+          "type": "string"
+        },
+        {
+          "name": "seat_layout_hash",
+          "type": "string"
+        },
+        {
+          "name": "seat_index_map_hash",
+          "type": "string"
+        },
+        {
+          "name": "total_seats",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "create_venue",
+      "docs": [
+        "创建新场馆"
+      ],
+      "discriminator": [
+        162,
+        203,
+        21,
+        140,
+        131,
+        95,
+        73,
+        87
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "场馆创建者（主办方）"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "venue_account",
+          "docs": [
+            "场馆账户（PDA）- 使用 InitSpace 自动计算空间"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  110,
+                  117,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "venue_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "系统程序"
+          ],
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "venue_name",
+          "type": "string"
+        },
+        {
+          "name": "venue_address",
+          "type": "string"
+        },
+        {
+          "name": "total_capacity",
+          "type": "u32"
+        },
+        {
+          "name": "venue_description",
+          "type": "string"
+        },
+        {
+          "name": "venue_type",
+          "type": {
+            "defined": {
+              "name": "VenueType"
+            }
+          }
+        },
+        {
+          "name": "contact_info",
+          "type": "string"
+        },
+        {
+          "name": "floor_plan_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "facilities_info_hash",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "delete_seat_status_map",
+      "docs": [
+        "删除座位状态映射"
+      ],
+      "discriminator": [
+        192,
+        151,
+        29,
+        226,
+        198,
+        5,
+        147,
+        36
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "活动创建者"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "docs": [
+            "活动账户"
+          ],
+          "writable": true
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "票种账户"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seat_status_map",
+          "docs": [
+            "座位状态映射账户（PDA）- 待删除"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  117,
+                  115,
+                  95,
+                  109,
+                  97,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type"
+              },
+              {
+                "kind": "arg",
+                "path": "area_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "area_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "delete_ticket_type",
+      "docs": [
+        "删除票种配置"
+      ],
+      "discriminator": [
+        67,
+        49,
+        248,
+        177,
+        198,
+        187,
+        55,
+        221
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "要删除的票种账户"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        },
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "delete_venue",
+      "docs": [
+        "删除场馆"
+      ],
+      "discriminator": [
+        34,
+        190,
+        242,
+        88,
+        190,
+        70,
+        50,
+        244
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "场馆创建者（主办方）"
+          ],
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "venue_account"
+          ]
+        },
+        {
+          "name": "venue_account",
+          "docs": [
+            "要删除的场馆账户（PDA）"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  110,
+                  117,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "venue_name"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "venue_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "get_seat_status_batch",
+      "docs": [
+        "查询座位状态"
+      ],
+      "discriminator": [
+        212,
+        230,
+        161,
+        118,
+        87,
+        168,
+        122,
+        197
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "docs": [
+            "授权用户（可以是创建者或购票者）"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "event",
+          "docs": [
+            "活动账户"
+          ]
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "票种账户"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seat_status_map",
+          "docs": [
+            "座位状态映射账户"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  117,
+                  115,
+                  95,
+                  109,
+                  97,
+                  112
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type"
+              },
+              {
+                "kind": "arg",
+                "path": "area_id"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "area_id",
+          "type": "string"
+        },
+        {
+          "name": "seat_indices",
+          "type": {
+            "vec": "u32"
+          }
+        }
+      ]
+    },
+    {
+      "name": "list_ticket_for_sale",
+      "docs": [
+        "上架门票到二级市场"
+      ],
+      "discriminator": [
+        192,
+        148,
+        217,
+        93,
+        115,
+        16,
+        175,
+        148
+      ],
+      "accounts": [
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.mint",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "listing",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  97,
+                  114,
+                  107,
+                  101,
+                  116,
+                  112,
+                  108,
+                  97,
+                  99,
+                  101,
+                  95,
+                  108,
+                  105,
+                  115,
+                  116,
+                  105,
+                  110,
+                  103
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.mint",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "seller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "mint_tickets",
+      "docs": [
+        "批量铸造门票NFT"
+      ],
+      "discriminator": [
+        107,
+        199,
+        197,
+        59,
+        114,
+        52,
+        234,
+        0
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "quantity",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "purchase_ticket",
+      "docs": [
+        "购买门票"
+      ],
+      "discriminator": [
+        90,
+        91,
+        173,
+        20,
+        72,
+        109,
+        15,
+        146
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event.organizer",
+                "account": "EventAccount"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "earnings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  97,
+                  114,
+                  110,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type.sold_count",
+                "account": "TicketTypeAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "buyer_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "buyer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "redeem_ticket",
+      "docs": [
+        "核销门票（入场验证）"
+      ],
+      "discriminator": [
+        129,
+        120,
+        104,
+        224,
+        155,
+        25,
+        22,
+        192
+      ],
+      "accounts": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.mint",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "validator",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "refund_ticket",
+      "docs": [
+        "退票"
+      ],
+      "discriminator": [
+        178,
+        97,
+        75,
+        218,
+        227,
+        28,
+        21,
+        73
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event.organizer",
+                "account": "EventAccount"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "account",
+                "path": "ticket.ticket_type_name",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "ticket.mint",
+                "account": "TicketAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "earnings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  97,
+                  114,
+                  110,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "refund_requester",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "setup_platform",
+      "docs": [
+        "设置平台（初始化或更新）- 统一方法"
+      ],
+      "discriminator": [
+        112,
+        112,
+        41,
+        196,
+        52,
+        192,
+        165,
+        54
+      ],
+      "accounts": [
+        {
+          "name": "platform",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "fee_recipient",
+          "optional": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "platform_fee_bps",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "new_fee_recipient",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "new_is_paused",
+          "type": {
+            "option": "bool"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_dynamic_pricing",
+      "docs": [
+        "更新动态定价"
+      ],
+      "discriminator": [
+        22,
+        97,
+        198,
+        34,
+        14,
+        133,
+        83,
+        168
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event.organizer",
+                "account": "EventAccount"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "new_price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_event",
+      "docs": [
+        "修改活动信息（不包括场馆信息）"
+      ],
+      "discriminator": [
+        70,
+        108,
+        211,
+        125,
+        171,
+        176,
+        25,
+        217
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "new_event_description_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_event_poster_image_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_seat_map_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_performer_details_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_contact_info_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_refund_policy_hash",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_event_status",
+      "docs": [
+        "更新活动状态"
+      ],
+      "discriminator": [
+        181,
+        237,
+        172,
+        72,
+        61,
+        132,
+        77,
+        247
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "arg",
+                "path": "event_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "venue",
+          "docs": [
+            "关联的场馆账户（用于状态更新）"
+          ],
+          "writable": true
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "event_name",
+          "type": "string"
+        },
+        {
+          "name": "new_status",
+          "type": {
+            "defined": {
+              "name": "EventStatus"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_event_venue",
+      "docs": [
+        "更换活动关联的场馆"
+      ],
+      "discriminator": [
+        56,
+        108,
+        23,
+        228,
+        91,
+        80,
+        32,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "old_venue",
+          "docs": [
+            "原场馆账户（需要更新状态为未使用）"
+          ],
+          "writable": true
+        },
+        {
+          "name": "new_venue",
+          "docs": [
+            "新的关联场馆账户（必须已存在且为未使用或活跃状态）"
+          ],
+          "writable": true
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_seat_status",
+      "docs": [
+        "更新座位状态"
+      ],
+      "discriminator": [
+        133,
+        39,
+        14,
+        126,
+        39,
+        157,
+        162,
+        234
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "场馆创建者（主办方）"
+          ],
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "venue_account"
+          ]
+        },
+        {
+          "name": "venue_account",
+          "docs": [
+            "场馆账户（PDA）"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  110,
+                  117,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "venue_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "docs": [
+            "票种账户（PDA）"
+          ],
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "event",
+          "docs": [
+            "关联的活动账户"
+          ]
+        },
+        {
+          "name": "seat_account",
+          "docs": [
+            "座位账户（PDA）"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  97,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "venue_account"
+              },
+              {
+                "kind": "account",
+                "path": "ticket_type"
+              },
+              {
+                "kind": "arg",
+                "path": "seat_number"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "venue_name",
+          "type": "string"
+        },
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "seat_number",
+          "type": "string"
+        },
+        {
+          "name": "new_status",
+          "type": {
+            "defined": {
+              "name": "SeatStatus"
+            }
+          }
+        },
+        {
+          "name": "event_key",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "ticket_nft",
+          "type": {
+            "option": "pubkey"
+          }
+        },
+        {
+          "name": "ticket_type_id",
+          "type": {
+            "option": "u8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_ticket_type",
+      "docs": [
+        "修改票种配置"
+      ],
+      "discriminator": [
+        109,
+        57,
+        189,
+        204,
+        58,
+        232,
+        94,
+        216
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ticket_type",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  105,
+                  99,
+                  107,
+                  101,
+                  116,
+                  95,
+                  116,
+                  121,
+                  112,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              },
+              {
+                "kind": "arg",
+                "path": "ticket_type_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "platform",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  108,
+                  97,
+                  116,
+                  102,
+                  111,
+                  114,
+                  109
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "ticket_type_name",
+          "type": "string"
+        },
+        {
+          "name": "new_price",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "new_max_resale_royalty",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "new_dynamic_pricing_rules_hash",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "update_venue",
+      "docs": [
+        "更新场馆信息"
+      ],
+      "discriminator": [
+        148,
+        1,
+        158,
+        184,
+        188,
+        145,
+        146,
+        39
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "docs": [
+            "场馆创建者（主办方）"
+          ],
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "venue_account"
+          ]
+        },
+        {
+          "name": "venue_account",
+          "docs": [
+            "场馆账户（PDA）"
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  110,
+                  117,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "arg",
+                "path": "venue_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "系统程序"
+          ],
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "venue_name",
+          "type": "string"
+        },
+        {
+          "name": "new_venue_address",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_total_capacity",
+          "type": {
+            "option": "u32"
+          }
+        },
+        {
+          "name": "new_venue_description",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_venue_type",
+          "type": {
+            "option": {
+              "defined": {
+                "name": "VenueType"
+              }
+            }
+          }
+        },
+        {
+          "name": "new_contact_info",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_floor_plan_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_seat_map_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_facilities_info_hash",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_venue_status",
+          "type": {
+            "option": {
+              "defined": {
+                "name": "VenueStatus"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "withdraw_proceeds",
+      "docs": [
+        "提取收益（主办方）"
+      ],
+      "discriminator": [
+        124,
+        68,
+        215,
+        12,
+        201,
+        136,
+        54,
+        72
+      ],
+      "accounts": [
+        {
+          "name": "event",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  118,
+                  101,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "organizer"
+              },
+              {
+                "kind": "account",
+                "path": "event.event_name",
+                "account": "EventAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "earnings",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  97,
+                  114,
+                  110,
+                  105,
+                  110,
+                  103,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "event"
+              }
+            ]
+          }
+        },
+        {
+          "name": "organizer",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "event"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "EventAccount",
+      "discriminator": [
+        98,
+        136,
+        32,
+        165,
+        133,
+        231,
+        243,
+        154
+      ]
+    },
+    {
+      "name": "MarketplaceListingAccount",
+      "discriminator": [
+        140,
+        214,
+        122,
+        199,
+        233,
+        132,
+        105,
+        5
+      ]
+    },
+    {
+      "name": "OrganizerEarnings",
+      "discriminator": [
+        131,
+        82,
+        119,
+        176,
+        110,
+        87,
+        32,
+        51
+      ]
+    },
+    {
+      "name": "PlatformAccount",
+      "discriminator": [
+        17,
+        82,
+        11,
+        113,
+        154,
+        58,
+        191,
+        250
+      ]
+    },
+    {
+      "name": "SeatAccount",
+      "discriminator": [
+        251,
+        85,
+        162,
+        147,
+        128,
+        212,
+        122,
+        178
+      ]
+    },
+    {
+      "name": "SeatStatusMap",
+      "discriminator": [
+        126,
+        136,
+        168,
+        128,
+        22,
+        10,
+        212,
+        80
+      ]
+    },
+    {
+      "name": "TicketAccount",
+      "discriminator": [
+        231,
+        93,
+        13,
+        18,
+        239,
+        66,
+        21,
+        45
+      ]
+    },
+    {
+      "name": "TicketTypeAccount",
+      "discriminator": [
+        213,
+        215,
+        241,
+        242,
+        198,
+        103,
+        146,
+        87
+      ]
+    },
+    {
+      "name": "VenueAccount",
+      "discriminator": [
+        121,
+        51,
+        148,
+        147,
+        208,
+        230,
+        202,
+        176
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidArgument",
+      "msg": "无效的参数"
+    },
+    {
+      "code": 6001,
+      "name": "Unauthorized",
+      "msg": "操作未授权"
+    },
+    {
+      "code": 6002,
+      "name": "PlatformPaused",
+      "msg": "平台已暂停"
+    },
+    {
+      "code": 6003,
+      "name": "Overflow",
+      "msg": "数值溢出"
+    },
+    {
+      "code": 6004,
+      "name": "Underflow",
+      "msg": "数值下溢"
+    },
+    {
+      "code": 6005,
+      "name": "EventNotFound",
+      "msg": "活动不存在"
+    },
+    {
+      "code": 6006,
+      "name": "EventAlreadyExists",
+      "msg": "活动已存在"
+    },
+    {
+      "code": 6007,
+      "name": "EventCancelled",
+      "msg": "活动已取消"
+    },
+    {
+      "code": 6008,
+      "name": "EventCompleted",
+      "msg": "活动已完成"
+    },
+    {
+      "code": 6009,
+      "name": "EventNotStarted",
+      "msg": "活动尚未开始"
+    },
+    {
+      "code": 6010,
+      "name": "EventEnded",
+      "msg": "活动已结束"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidEventTime",
+      "msg": "活动时间无效"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidVenueCapacity",
+      "msg": "场馆容量无效"
+    },
+    {
+      "code": 6013,
+      "name": "TicketTypeNotFound",
+      "msg": "票种不存在"
+    },
+    {
+      "code": 6014,
+      "name": "TicketTypeAlreadyExists",
+      "msg": "票种已存在"
+    },
+    {
+      "code": 6015,
+      "name": "TicketNotFound",
+      "msg": "门票不存在"
+    },
+    {
+      "code": 6016,
+      "name": "InsufficientTicketSupply",
+      "msg": "门票库存不足"
+    },
+    {
+      "code": 6017,
+      "name": "TicketSoldOut",
+      "msg": "门票已售罄"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidTicketStatus",
+      "msg": "门票状态无效"
+    },
+    {
+      "code": 6019,
+      "name": "TicketAlreadyRedeemed",
+      "msg": "门票已被核销"
+    },
+    {
+      "code": 6020,
+      "name": "TicketNotTransferable",
+      "msg": "门票不可转让"
+    },
+    {
+      "code": 6021,
+      "name": "ExceedsMaxTicketTypes",
+      "msg": "超出最大票种数量"
+    },
+    {
+      "code": 6022,
+      "name": "ExceedsTicketSupply",
+      "msg": "座位总数超出票种库存"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidPrice",
+      "msg": "价格无效"
+    },
+    {
+      "code": 6024,
+      "name": "PriceBelowMinimum",
+      "msg": "价格超出最小限制"
+    },
+    {
+      "code": 6025,
+      "name": "PriceAboveMaximum",
+      "msg": "价格超出最大限制"
+    },
+    {
+      "code": 6026,
+      "name": "InvalidPricingStrategy",
+      "msg": "定价策略无效"
+    },
+    {
+      "code": 6027,
+      "name": "InvalidDynamicPricingRule",
+      "msg": "动态定价规则无效"
+    },
+    {
+      "code": 6028,
+      "name": "PriceSlippageExceeded",
+      "msg": "价格滑点超出允许范围"
+    },
+    {
+      "code": 6029,
+      "name": "SaleNotStarted",
+      "msg": "销售尚未开始"
+    },
+    {
+      "code": 6030,
+      "name": "SaleEnded",
+      "msg": "销售已结束"
+    },
+    {
+      "code": 6031,
+      "name": "SaleAlreadyStarted",
+      "msg": "销售已开始，不能执行此操作"
+    },
+    {
+      "code": 6032,
+      "name": "InvalidSaleTime",
+      "msg": "销售时间设置无效"
+    },
+    {
+      "code": 6033,
+      "name": "InvalidPurchaseQuantity",
+      "msg": "购买数量无效"
+    },
+    {
+      "code": 6034,
+      "name": "ExceedsPurchaseLimit",
+      "msg": "超出单次购买限制"
+    },
+    {
+      "code": 6035,
+      "name": "InsufficientPayment",
+      "msg": "支付金额不足"
+    },
+    {
+      "code": 6036,
+      "name": "ExcessivePayment",
+      "msg": "支付金额过多"
+    },
+    {
+      "code": 6037,
+      "name": "RefundNotAllowed",
+      "msg": "不符合退票条件"
+    },
+    {
+      "code": 6038,
+      "name": "RefundDeadlinePassed",
+      "msg": "退票已截止"
+    },
+    {
+      "code": 6039,
+      "name": "TicketAlreadyRefunded",
+      "msg": "门票已被退款"
+    },
+    {
+      "code": 6040,
+      "name": "ListingNotFound",
+      "msg": "挂单不存在"
+    },
+    {
+      "code": 6041,
+      "name": "ListingExpired",
+      "msg": "挂单已过期"
+    },
+    {
+      "code": 6042,
+      "name": "ListingCancelled",
+      "msg": "挂单已取消"
+    },
+    {
+      "code": 6043,
+      "name": "ListingAlreadySold",
+      "msg": "挂单已售出"
+    },
+    {
+      "code": 6044,
+      "name": "CannotBuyOwnListing",
+      "msg": "不能购买自己的挂单"
+    },
+    {
+      "code": 6045,
+      "name": "InvalidRoyaltyRate",
+      "msg": "版税比例无效"
+    },
+    {
+      "code": 6046,
+      "name": "NotEventOrganizer",
+      "msg": "非活动主办方"
+    },
+    {
+      "code": 6047,
+      "name": "NotTicketOwner",
+      "msg": "非门票持有者"
+    },
+    {
+      "code": 6048,
+      "name": "NotPlatformAdmin",
+      "msg": "非平台管理员"
+    },
+    {
+      "code": 6049,
+      "name": "NotAuthorizedValidator",
+      "msg": "非授权验票员"
+    },
+    {
+      "code": 6050,
+      "name": "InvalidTimestamp",
+      "msg": "时间戳无效"
+    },
+    {
+      "code": 6051,
+      "name": "OperationTimeExpired",
+      "msg": "操作时间已过"
+    },
+    {
+      "code": 6052,
+      "name": "OperationTimeNotReached",
+      "msg": "操作时间未到"
+    },
+    {
+      "code": 6053,
+      "name": "AccountInitializationFailed",
+      "msg": "账户初始化失败"
+    },
+    {
+      "code": 6054,
+      "name": "InvalidAccountData",
+      "msg": "账户数据无效"
+    },
+    {
+      "code": 6055,
+      "name": "InvalidAccount",
+      "msg": "账户无效"
+    },
+    {
+      "code": 6056,
+      "name": "InsufficientAccountSpace",
+      "msg": "账户空间不足"
+    },
+    {
+      "code": 6057,
+      "name": "AccountClosed",
+      "msg": "账户已关闭"
+    },
+    {
+      "code": 6058,
+      "name": "MintFailed",
+      "msg": "NFT铸造失败"
+    },
+    {
+      "code": 6059,
+      "name": "TransferFailed",
+      "msg": "NFT转移失败"
+    },
+    {
+      "code": 6060,
+      "name": "BurnFailed",
+      "msg": "NFT销毁失败"
+    },
+    {
+      "code": 6061,
+      "name": "InvalidMetadata",
+      "msg": "NFT元数据无效"
+    },
+    {
+      "code": 6062,
+      "name": "NFTNotFound",
+      "msg": "NFT不存在"
+    },
+    {
+      "code": 6063,
+      "name": "InsufficientBalance",
+      "msg": "余额不足"
+    },
+    {
+      "code": 6064,
+      "name": "WithdrawAmountTooLarge",
+      "msg": "提取金额过大"
+    },
+    {
+      "code": 6065,
+      "name": "EarningsAccountNotFound",
+      "msg": "收益账户不存在"
+    },
+    {
+      "code": 6066,
+      "name": "FeeCalculationError",
+      "msg": "手续费计算错误"
+    },
+    {
+      "code": 6067,
+      "name": "StringTooLong",
+      "msg": "字符串长度超限"
+    },
+    {
+      "code": 6068,
+      "name": "InvalidStringLength",
+      "msg": "字符串长度无效"
+    },
+    {
+      "code": 6069,
+      "name": "ArrayTooLong",
+      "msg": "数组长度超限"
+    },
+    {
+      "code": 6070,
+      "name": "RequiredFieldEmpty",
+      "msg": "必填字段为空"
+    },
+    {
+      "code": 6071,
+      "name": "InvalidDataFormat",
+      "msg": "数据格式错误"
+    },
+    {
+      "code": 6072,
+      "name": "InvalidOperationSequence",
+      "msg": "操作序列错误"
+    },
+    {
+      "code": 6073,
+      "name": "InvalidStateTransition",
+      "msg": "状态转换无效"
+    },
+    {
+      "code": 6074,
+      "name": "DuplicateOperation",
+      "msg": "重复操作"
+    },
+    {
+      "code": 6075,
+      "name": "OperationConflict",
+      "msg": "操作冲突"
+    },
+    {
+      "code": 6076,
+      "name": "TicketAlreadySold",
+      "msg": "票种已有门票售出，不能删除"
+    },
+    {
+      "code": 6077,
+      "name": "TicketAlreadyMinted",
+      "msg": "票种已被铸造，不能删除"
+    },
+    {
+      "code": 6078,
+      "name": "VenueNameTooLong",
+      "msg": "场馆名称过长"
+    },
+    {
+      "code": 6079,
+      "name": "InvalidVenueName",
+      "msg": "场馆名称不匹配"
+    },
+    {
+      "code": 6080,
+      "name": "VenueAddressTooLong",
+      "msg": "场馆地址过长"
+    },
+    {
+      "code": 6081,
+      "name": "VenueDescriptionTooLong",
+      "msg": "场馆描述过长"
+    },
+    {
+      "code": 6082,
+      "name": "ContactInfoTooLong",
+      "msg": "联系信息过长"
+    },
+    {
+      "code": 6083,
+      "name": "InvalidCapacity",
+      "msg": "场馆容量无效"
+    },
+    {
+      "code": 6084,
+      "name": "InvalidHash",
+      "msg": "哈希值无效"
+    },
+    {
+      "code": 6085,
+      "name": "VenueNotFound",
+      "msg": "场馆不存在"
+    },
+    {
+      "code": 6086,
+      "name": "VenueAlreadyExists",
+      "msg": "场馆已存在"
+    },
+    {
+      "code": 6087,
+      "name": "SeatNumberTooLong",
+      "msg": "座位编号过长"
+    },
+    {
+      "code": 6088,
+      "name": "AreaIdTooLong",
+      "msg": "区域ID过长"
+    },
+    {
+      "code": 6089,
+      "name": "RowNumberTooLong",
+      "msg": "排号过长"
+    },
+    {
+      "code": 6090,
+      "name": "SeatNumberInRowTooLong",
+      "msg": "座位号过长"
+    },
+    {
+      "code": 6091,
+      "name": "SeatNotFound",
+      "msg": "座位不存在"
+    },
+    {
+      "code": 6092,
+      "name": "SeatAlreadyExists",
+      "msg": "座位已存在"
+    },
+    {
+      "code": 6093,
+      "name": "SeatNotAvailable",
+      "msg": "座位不可用"
+    },
+    {
+      "code": 6094,
+      "name": "TooManySeats",
+      "msg": "批量座位数量过多"
+    },
+    {
+      "code": 6095,
+      "name": "InvalidSeatIndex",
+      "msg": "座位索引无效"
+    },
+    {
+      "code": 6096,
+      "name": "InvalidSeatStatus",
+      "msg": "座位状态无效"
+    },
+    {
+      "code": 6097,
+      "name": "CannotModifyWithSoldSeats",
+      "msg": "存在已售座位，不能修改座位配置"
+    },
+    {
+      "code": 6098,
+      "name": "CannotDeleteWithSoldSeats",
+      "msg": "存在已售座位，不能删除座位状态映射"
+    },
+    {
+      "code": 6099,
+      "name": "NotVenueOwner",
+      "msg": "非场馆拥有者"
+    },
+    {
+      "code": 6100,
+      "name": "VenueStillActive",
+      "msg": "场馆仍处于活跃状态，不能删除"
+    },
+    {
+      "code": 6101,
+      "name": "OnlyUnusedVenueCanBeDeleted",
+      "msg": "只能删除未使用状态的场馆"
+    },
+    {
+      "code": 6102,
+      "name": "VenueNotActive",
+      "msg": "场馆未激活"
+    }
+  ],
+  "types": [
+    {
+      "name": "EventAccount",
+      "docs": [
+        "活动账户状态 - 关联场馆版本"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "organizer",
+            "docs": [
+              "主办方钱包地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "event_name",
+            "docs": [
+              "活动名称"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "event_description_hash",
+            "docs": [
+              "活动详细描述的IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "event_poster_image_hash",
+            "docs": [
+              "活动海报图片的IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "event_start_time",
+            "docs": [
+              "活动开始时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "event_end_time",
+            "docs": [
+              "活动结束时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "ticket_sale_start_time",
+            "docs": [
+              "门票开始销售时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "ticket_sale_end_time",
+            "docs": [
+              "门票销售结束时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "venue_account",
+            "docs": [
+              "关联的场馆账户（必填，引用已创建的场馆）"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "seat_map_hash",
+            "docs": [
+              "座位图布局数据的IPFS哈希（JSON格式，可覆盖场馆默认座位图）"
+            ],
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "event_category",
+            "docs": [
+              "活动分类"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "performer_details_hash",
+            "docs": [
+              "表演者详细信息的IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "contact_info_hash",
+            "docs": [
+              "联系信息的IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "event_status",
+            "docs": [
+              "活动当前状态"
+            ],
+            "type": {
+              "defined": {
+                "name": "EventStatus"
+              }
+            }
+          },
+          {
+            "name": "refund_policy_hash",
+            "docs": [
+              "退票政策的IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "pricing_strategy_type",
+            "docs": [
+              "定价策略类型"
+            ],
+            "type": {
+              "defined": {
+                "name": "PricingStrategyType"
+              }
+            }
+          },
+          {
+            "name": "total_tickets_minted",
+            "docs": [
+              "已铸造的门票总数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_tickets_sold",
+            "docs": [
+              "已售出的门票总数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_tickets_refunded",
+            "docs": [
+              "已退款的门票总数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_tickets_resale_available",
+            "docs": [
+              "退票后可再次销售的门票总数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_revenue",
+            "docs": [
+              "总收入（以lamports计算）"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "ticket_types_count",
+            "docs": [
+              "票种数量"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "ticket_area_mappings",
+            "docs": [
+              "活动关联的票种-区域ID列表（格式：票种名-区域ID，最多50个项目，每个最长50字符）"
+            ],
+            "type": {
+              "vec": "string"
+            }
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "创建时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "docs": [
+              "最后更新时间戳"
+            ],
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EventStatus",
+      "docs": [
+        "活动状态枚举"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Upcoming"
+          },
+          {
+            "name": "OnSale"
+          },
+          {
+            "name": "SoldOut"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Postponed"
+          },
+          {
+            "name": "Completed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ListingStatus",
+      "docs": [
+        "市场挂单状态枚举"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Sold"
+          },
+          {
+            "name": "Cancelled"
+          },
+          {
+            "name": "Expired"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MarketplaceListingAccount",
+      "docs": [
+        "票务市场挂单信息"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "ticket_mint",
+            "docs": [
+              "挂单的门票mint"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "seller",
+            "docs": [
+              "卖家地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "price",
+            "docs": [
+              "挂单价格"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "listed_at",
+            "docs": [
+              "挂单时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "docs": [
+              "挂单状态"
+            ],
+            "type": {
+              "defined": {
+                "name": "ListingStatus"
+              }
+            }
+          },
+          {
+            "name": "buyer",
+            "docs": [
+              "买家地址（如果已售出）"
+            ],
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "sold_at",
+            "docs": [
+              "售出时间"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "sold_price",
+            "docs": [
+              "实际成交价格"
+            ],
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "royalty_bps",
+            "docs": [
+              "版税比例（基点）"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "platform_fee_bps",
+            "docs": [
+              "平台手续费（基点）"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_reserved",
+            "docs": [
+              "预留空间"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                31
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrganizerEarnings",
+      "docs": [
+        "主办方收益账户"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "organizer",
+            "docs": [
+              "主办方地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "event",
+            "docs": [
+              "活动地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "total_earnings",
+            "docs": [
+              "总收益"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "withdrawn_amount",
+            "docs": [
+              "已提取金额"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "pending_amount",
+            "docs": [
+              "待提取金额"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "royalty_earnings",
+            "docs": [
+              "版税收益（二级市场）"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "last_withdrawal_at",
+            "docs": [
+              "最后提取时间"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "withdrawal_count",
+            "docs": [
+              "提取次数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_reserved",
+            "docs": [
+              "预留空间"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                31
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PlatformAccount",
+      "docs": [
+        "平台配置账户"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "docs": [
+              "平台管理员"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "platform_fee_bps",
+            "docs": [
+              "平台手续费（基点，1 bps = 0.01%）"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "fee_recipient",
+            "docs": [
+              "平台收入账户"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "is_paused",
+            "docs": [
+              "平台是否暂停"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "min_ticket_price",
+            "docs": [
+              "最低票价（防止恶意低价）"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "max_ticket_price",
+            "docs": [
+              "最高票价（防止恶意高价）"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "supported_tokens",
+            "docs": [
+              "支持的代币mints"
+            ],
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "total_platform_revenue",
+            "docs": [
+              "平台总收入"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_transactions",
+            "docs": [
+              "平台总交易数"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "创建时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "docs": [
+              "最后更新时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "_reserved",
+            "docs": [
+              "预留空间"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                63
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PricingStrategyType",
+      "docs": [
+        "定价策略类型"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "FixedPrice"
+          },
+          {
+            "name": "DynamicPricing"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SeatAccount",
+      "docs": [
+        "单个座位信息（用于链上状态追踪）- 使用 InitSpace"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "venue",
+            "docs": [
+              "所属场馆"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket_type_key",
+            "docs": [
+              "所属票种（PDA种子中使用）"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "event",
+            "docs": [
+              "所属活动（如果已关联到具体活动）"
+            ],
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "seat_number",
+            "docs": [
+              "座位编号（唯一标识）"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "area_id",
+            "docs": [
+              "所属区域ID"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "row_number",
+            "docs": [
+              "排号"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "seat_number_in_row",
+            "docs": [
+              "座位号"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "seat_status",
+            "docs": [
+              "座位状态"
+            ],
+            "type": {
+              "defined": {
+                "name": "SeatStatus"
+              }
+            }
+          },
+          {
+            "name": "ticket_nft",
+            "docs": [
+              "关联的NFT门票（如果已售出）"
+            ],
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "ticket_type_id",
+            "docs": [
+              "关联的票种ID"
+            ],
+            "type": {
+              "option": "u8"
+            }
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "创建时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "docs": [
+              "最后更新时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SeatStatus",
+      "docs": [
+        "座位状态"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Available"
+          },
+          {
+            "name": "Sold"
+          },
+          {
+            "name": "Refunded"
+          },
+          {
+            "name": "Redeemed"
+          },
+          {
+            "name": "TempLocked"
+          },
+          {
+            "name": "Unavailable"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SeatStatusMap",
+      "docs": [
+        "座位状态管理账户 - 使用位图高效存储"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event",
+            "docs": [
+              "所属活动"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket_type",
+            "docs": [
+              "所属票种"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "seat_layout_hash",
+            "docs": [
+              "座位布局IPFS哈希（详细座位信息）"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "seat_index_map_hash",
+            "docs": [
+              "座位索引映射IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "total_seats",
+            "docs": [
+              "总座位数量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "sold_seats",
+            "docs": [
+              "已售座位数量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "seat_status_bitmap",
+            "docs": [
+              "座位状态位图（每座位2位：00=可用，01=已售，10=锁定，11=不可用）",
+              "最多支持16000个座位（4000字节 * 8位 / 2位 = 16000座位）"
+            ],
+            "type": "bytes"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "创建时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "docs": [
+              "更新时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SeatStatusUpdate",
+      "docs": [
+        "座位状态更新数据结构"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "seat_index",
+            "docs": [
+              "座位索引"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "new_status",
+            "docs": [
+              "新的座位状态"
+            ],
+            "type": {
+              "defined": {
+                "name": "SeatStatus"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TicketAccount",
+      "docs": [
+        "门票NFT账户状态"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event",
+            "docs": [
+              "所属活动"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket_type_name",
+            "docs": [
+              "票种名称"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "mint",
+            "docs": [
+              "门票NFT的mint地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "current_owner",
+            "docs": [
+              "当前持有者"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "original_buyer",
+            "docs": [
+              "原始购买者"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "seat_number",
+            "docs": [
+              "座位号（如果适用）"
+            ],
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "original_price",
+            "docs": [
+              "原始购买价格"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "current_status",
+            "docs": [
+              "当前状态"
+            ],
+            "type": {
+              "defined": {
+                "name": "TicketStatus"
+              }
+            }
+          },
+          {
+            "name": "purchased_at",
+            "docs": [
+              "购买时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "redeemed_at",
+            "docs": [
+              "核销时间戳（如果已核销）"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "metadata_hash",
+            "docs": [
+              "NFT元数据的IPFS哈希"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "transferable",
+            "docs": [
+              "是否允许转售"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "transfer_count",
+            "docs": [
+              "转售次数"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "last_transfer_at",
+            "docs": [
+              "最后转售时间"
+            ],
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "_reserved",
+            "docs": [
+              "预留空间"
+            ],
+            "type": {
+              "array": [
+                "u8",
+                31
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "TicketStatus",
+      "docs": [
+        "门票状态枚举"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Minted"
+          },
+          {
+            "name": "Sold"
+          },
+          {
+            "name": "Transferred"
+          },
+          {
+            "name": "Redeemed"
+          },
+          {
+            "name": "Refunded"
+          },
+          {
+            "name": "Burned"
+          },
+          {
+            "name": "AvailableForResale"
+          },
+          {
+            "name": "ListedForSale"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TicketTypeAccount",
+      "docs": [
+        "票种配置 - 使用 InitSpace"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "event",
+            "docs": [
+              "所属活动"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "ticket_type_id",
+            "docs": [
+              "票种ID"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "type_name",
+            "docs": [
+              "票种名称"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "initial_price",
+            "docs": [
+              "初始价格"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "current_price",
+            "docs": [
+              "当前价格（动态定价会更新）"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_supply",
+            "docs": [
+              "总发行数量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "sold_count",
+            "docs": [
+              "已售出数量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "refunded_count",
+            "docs": [
+              "已退票数量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "max_resale_royalty",
+            "docs": [
+              "二级市场转售时的最大版税比例（基点）"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "is_fixed_price",
+            "docs": [
+              "是否采用固定价格"
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "dynamic_pricing_rules_hash",
+            "docs": [
+              "动态定价规则的IPFS哈希"
+            ],
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "last_price_update",
+            "docs": [
+              "最后价格更新时间"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VenueAccount",
+      "docs": [
+        "场馆账户状态 - 使用 InitSpace 自动计算空间"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "creator",
+            "docs": [
+              "创建者（主办方）钱包地址"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "venue_name",
+            "docs": [
+              "场馆名称"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "venue_address",
+            "docs": [
+              "场馆地址"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "total_capacity",
+            "docs": [
+              "场馆总容量"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "venue_description",
+            "docs": [
+              "场馆描述"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "floor_plan_hash",
+            "docs": [
+              "场馆平面图的IPFS哈希（SVG或PNG/JPG格式）"
+            ],
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "seat_map_hash",
+            "docs": [
+              "座位图布局数据的IPFS哈希（JSON格式）"
+            ],
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "venue_type",
+            "docs": [
+              "场馆类型"
+            ],
+            "type": {
+              "defined": {
+                "name": "VenueType"
+              }
+            }
+          },
+          {
+            "name": "facilities_info_hash",
+            "docs": [
+              "场馆设施信息的IPFS哈希"
+            ],
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "contact_info",
+            "docs": [
+              "场馆联系信息"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "venue_status",
+            "docs": [
+              "场馆状态"
+            ],
+            "type": {
+              "defined": {
+                "name": "VenueStatus"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "创建时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "updated_at",
+            "docs": [
+              "最后更新时间戳"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump值（用于性能优化）"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VenueStatus",
+      "docs": [
+        "场馆状态枚举"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Unused"
+          },
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Maintenance"
+          },
+          {
+            "name": "Inactive"
+          },
+          {
+            "name": "TemporarilyClosed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VenueType",
+      "docs": [
+        "场馆类型枚举"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Indoor"
+          },
+          {
+            "name": "Outdoor"
+          },
+          {
+            "name": "Stadium"
+          },
+          {
+            "name": "Theater"
+          },
+          {
+            "name": "Concert"
+          },
+          {
+            "name": "Convention"
+          },
+          {
+            "name": "Exhibition"
+          },
+          {
+            "name": "Other"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,240 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# D-Tickets项目文件结构规范
+
+## 根目录结构
+```
+d-tickets/
+├── programs/                 # Solana智能合约程序
+├── frontend/                 # 用户前端应用
+├── admin-dashboard/          # 主办方管理后台
+├── tests/                    # 测试文件
+├── scripts/                  # 部署和工具脚本
+├── metadata/                 # NFT元数据模板
+├── docs/                     # 项目文档
+├── .cursor/                  # Cursor IDE配置
+├── Anchor.toml               # Anchor项目配置
+├── Cargo.toml                # Rust项目配置
+└── package.json              # Node.js依赖管理
+```
+
+## 智能合约结构 (programs/)
+```
+programs/
+├── event-management/         # 活动与票务管理
+│   ├── src/
+│   │   ├── lib.rs           # 主程序入口
+│   │   ├── instructions/    # 指令处理模块
+│   │   │   ├── mod.rs
+│   │   │   ├── create_event.rs
+│   │   │   ├── mint_tickets.rs
+│   │   │   └── refund_ticket.rs
+│   │   ├── state/           # 账户状态定义
+│   │   │   ├── mod.rs
+│   │   │   ├── event.rs
+│   │   │   └── ticket.rs
+│   │   ├── errors.rs        # 错误定义
+│   │   └── constants.rs     # 常量定义
+│   └── Cargo.toml
+├── pricing-strategy/         # 动态定价策略
+│   ├── src/
+│   │   ├── lib.rs
+│   │   ├── instructions/
+│   │   ├── state/
+│   │   └── pricing/         # 定价算法模块
+│   └── Cargo.toml
+├── marketplace/              # 二级市场交易
+│   ├── src/
+│   │   ├── lib.rs
+│   │   ├── instructions/
+│   │   └── state/
+│   └── Cargo.toml
+└── common/                   # 共享代码库
+    ├── src/
+    │   ├── lib.rs
+    │   └── utils.rs
+    └── Cargo.toml
+```
+
+## 前端应用结构 (frontend/)
+```
+frontend/
+├── public/                   # 静态资源
+│   ├── index.html
+│   └── assets/
+├── src/
+│   ├── components/           # 可复用组件
+│   │   ├── common/          # 通用组件
+│   │   ├── wallet/          # 钱包连接组件
+│   │   ├── events/          # 活动相关组件
+│   │   └── tickets/         # 门票相关组件
+│   ├── pages/               # 页面组件
+│   │   ├── HomePage.tsx
+│   │   ├── EventDetails.tsx
+│   │   ├── PurchasePage.tsx
+│   │   └── MyTickets.tsx
+│   ├── hooks/               # 自定义Hooks
+│   │   ├── useWallet.ts
+│   │   ├── useProgram.ts
+│   │   └── useEvents.ts
+│   ├── utils/               # 工具函数
+│   │   ├── solana.ts
+│   │   ├── nft.ts
+│   │   └── constants.ts
+│   ├── types/               # TypeScript类型定义
+│   │   ├── events.ts
+│   │   ├── tickets.ts
+│   │   └── solana.ts
+│   ├── store/               # 状态管理
+│   │   ├── eventStore.ts
+│   │   └── userStore.ts
+│   ├── styles/              # 样式文件
+│   │   ├── globals.css
+│   │   └── components/
+│   ├── App.tsx
+│   └── main.tsx
+├── package.json
+└── vite.config.ts
+```
+
+## 管理后台结构 (admin-dashboard/)
+```
+admin-dashboard/
+├── src/
+│   ├── components/
+│   │   ├── dashboard/       # 仪表板组件
+│   │   ├── events/          # 活动管理组件
+│   │   ├── pricing/         # 定价策略组件
+│   │   └── analytics/       # 数据分析组件
+│   ├── pages/
+│   │   ├── Dashboard.tsx
+│   │   ├── CreateEvent.tsx
+│   │   ├── ManageEvents.tsx
+│   │   └── Analytics.tsx
+│   ├── services/            # API服务
+│   │   ├── eventService.ts
+│   │   └── analyticsService.ts
+│   └── utils/
+├── package.json
+└── tailwind.config.js
+```
+
+## 测试文件结构 (tests/)
+```
+tests/
+├── programs/                # 智能合约测试
+│   ├── event-management.ts
+│   ├── pricing-strategy.ts
+│   └── marketplace.ts
+├── frontend/                # 前端测试
+│   ├── components/
+│   ├── pages/
+│   └── utils/
+├── integration/             # 集成测试
+│   ├── purchase-flow.ts
+│   └── refund-flow.ts
+└── fixtures/                # 测试数据
+    ├── events.json
+    └── tickets.json
+```
+
+## 工具脚本 (scripts/)
+```
+scripts/
+├── deploy/                  # 部署脚本
+│   ├── deploy-programs.ts
+│   ├── initialize-programs.ts
+│   └── verify-deployment.ts
+├── migration/               # 数据迁移
+│   └── migrate-metadata.ts
+├── utils/                   # 工具脚本
+│   ├── generate-keypairs.ts
+│   ├── airdrop-sol.ts
+│   └── backup-accounts.ts
+└── monitoring/              # 监控脚本
+    ├── health-check.ts
+    └── metrics-collector.ts
+```
+
+## 元数据模板 (metadata/)
+```
+metadata/
+├── templates/               # NFT元数据模板
+│   ├── concert-ticket.json
+│   ├── sports-ticket.json
+│   └── theater-ticket.json
+├── images/                  # 图片资源
+│   ├── event-posters/
+│   └── ticket-designs/
+└── schemas/                 # 数据Schema
+    ├── event-schema.json
+    └── ticket-schema.json
+```
+
+## 配置文件规范
+
+### 环境变量 (.env)
+```bash
+# Solana网络配置
+SOLANA_NETWORK=devnet
+RPC_URL=https://api.devnet.solana.com
+
+# 程序ID
+EVENT_MANAGEMENT_PROGRAM_ID=
+PRICING_STRATEGY_PROGRAM_ID=
+MARKETPLACE_PROGRAM_ID=
+
+# IPFS配置
+IPFS_GATEWAY_URL=https://ipfs.io/ipfs/
+PINATA_API_KEY=
+PINATA_SECRET_KEY=
+
+# 前端配置
+VITE_APP_TITLE=D-Tickets
+VITE_SOLANA_NETWORK=devnet
+```
+
+### TypeScript配置 (tsconfig.json)
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/utils/*": ["./src/utils/*"]
+    }
+  }
+}
+```
+
+## 文件命名约定
+- 组件文件: `PascalCase.tsx` (如 `EventCard.tsx`)
+- Hook文件: `camelCase.ts` (如 `useWallet.ts`)  
+- 工具文件: `camelCase.ts` (如 `solanaUtils.ts`)
+- 常量文件: `UPPER_SNAKE_CASE.ts` (如 `PROGRAM_IDS.ts`)
+- 智能合约: `snake_case.rs` (如 `create_event.rs`)
+
+## Git工作流
+- 主分支: `main` (生产环境)
+- 开发分支: `develop` (开发环境)
+- 功能分支: `feature/功能名称`
+- 修复分支: `hotfix/修复内容`
+- 发布分支: `release/版本号`

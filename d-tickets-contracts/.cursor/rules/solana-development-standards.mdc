@@ -1,0 +1,193 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Solana开发标准与最佳实践
+
+## Anchor框架使用规范
+
+### 程序结构
+```rust
+// programs/event-management/src/lib.rs
+use anchor_lang::prelude::*;
+
+declare_id!("Your-Program-ID-Here");
+
+#[program]
+pub mod event_management {
+    use super::*;
+    // 程序指令实现
+}
+
+#[derive(Accounts)]
+pub struct CreateEvent<'info> {
+    // 账户定义
+}
+
+#[account]
+pub struct EventAccount {
+    // 数据结构定义
+}
+```
+
+### 错误处理
+- 使用自定义错误枚举: `#[error_code]`
+- 添加详细错误信息便于调试
+- 实现恰当的错误传播机制
+
+### 安全检查
+- 始终验证账户所有权和权限
+- 使用`has_one`约束验证账户关系
+- 实现重入攻击防护
+- 添加数值溢出检查
+
+## 前端Web3.js集成
+
+### 钱包连接
+```typescript
+import { useWallet } from '@solana/wallet-adapter-react';
+import { Connection, PublicKey } from '@solana/web3.js';
+
+// 钱包适配器配置
+const wallets = [
+  new PhantomWalletAdapter(),
+  new SolflareWalletAdapter(),
+  new BackpackWalletAdapter(),
+];
+```
+
+### 交易构建
+```typescript
+import { Program, AnchorProvider } from '@coral-xyz/anchor';
+
+// 程序交互示例
+const provider = new AnchorProvider(connection, wallet, {});
+const program = new Program(idl, programId, provider);
+
+const tx = await program.methods
+  .createEvent(eventData)
+  .accounts({
+    event: eventPDA,
+    organizer: wallet.publicKey,
+    systemProgram: SystemProgram.programId,
+  })
+  .rpc();
+```
+
+### 状态管理
+- 使用React Query或SWR进行链上数据缓存
+- 实现乐观更新提升用户体验
+- 添加自动重试机制处理网络异常
+
+## NFT元数据标准
+
+### Metaplex兼容格式
+```json
+{
+  "name": "Event Ticket #001",
+  "description": "周杰伦演唱会门票 - VIP区域",
+  "image": "https://ipfs.io/ipfs/QmHash...",
+  "attributes": [
+    {
+      "trait_type": "Event",
+      "value": "周杰伦演唱会"
+    },
+    {
+      "trait_type": "Ticket Type", 
+      "value": "VIP"
+    },
+    {
+      "trait_type": "Seat Number",
+      "value": "A-001"
+    }
+  ],
+  "properties": {
+    "files": [
+      {
+        "uri": "https://ipfs.io/ipfs/QmHash...",
+        "type": "image/png"
+      }
+    ],
+    "category": "image"
+  }
+}
+```
+
+## 测试框架
+
+### Anchor测试
+```typescript
+// tests/event-management.ts
+import * as anchor from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import { EventManagement } from "../target/types/event_management";
+
+describe("event-management", () => {
+  const provider = anchor.AnchorProvider.env();
+  anchor.setProvider(provider);
+  
+  const program = anchor.workspace.EventManagement as Program<EventManagement>;
+  
+  it("创建活动", async () => {
+    // 测试实现
+  });
+});
+```
+
+### 前端测试
+- 使用Jest + React Testing Library
+- Mock钱包连接和程序调用
+- 测试用户交互流程
+
+## 部署配置
+
+### Anchor.toml
+```toml
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+event_management = "Your-Program-ID"
+
+[programs.devnet]
+event_management = "Your-Program-ID"
+
+[programs.mainnet]
+event_management = "Your-Program-ID"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+```
+
+## 性能优化
+
+### 链上优化
+- 最小化账户大小和指令数据
+- 使用PDA(程序派生地址)减少存储需求
+- 批量操作减少交易数量
+
+### 链下优化
+- 实现连接池管理RPC请求
+- 使用CDN缓存静态资源
+- 延迟加载非关键组件
+
+## 监控与日志
+
+### 交易监控
+- 记录所有关键交易的状态和结果
+- 监控交易失败率和Gas消耗
+- 设置异常情况告警
+
+### 用户行为分析
+- 跟踪用户购票流程
+- 分析转化率和流失点
+- 收集用户反馈优化体验
